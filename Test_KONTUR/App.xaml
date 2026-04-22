@@ -3,7 +3,8 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:local="clr-namespace:Test_KONTUR"
              StartupUri="MainWindow.xaml">
+    
     <Application.Resources>
-         
+        <Converters:InverseBoolConverter x:Key="InverseBoolConverter"/>
     </Application.Resources>
 </Application>

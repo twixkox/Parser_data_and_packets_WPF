@@ -1,0 +1,84 @@
+﻿<UserControl x:Class="Test_KONTUR.Views.FirstTaskView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:Test_KONTUR.Views"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="970.436">
+    <Grid Margin="10" OpacityMask="White" Background="#FF9C9C9C">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <Grid Grid.Row="0" Margin="0.5">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="100"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="80"/>
+            </Grid.ColumnDefinitions>
+
+            <TextBlock Text="DataFile" VerticalAlignment="Center"/>
+
+
+            <TextBox Grid.Column="1" 
+                     Text="{Binding InputFilePath, UpdateSourceTrigger=PropertyChanged}" 
+                     Margin="5,0" 
+                     VerticalAlignment="Center"/>
+            <Button Grid.Column="2" 
+                    Content="Обзор..." 
+                    Command="{Binding SelectInputCommand}"
+                    Padding="5,2"/>
+        </Grid>
+        <Grid Grid.Row="1" Margin="0,5">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="100"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="80"/>
+            </Grid.ColumnDefinitions>
+
+            <TextBlock Text="CSV File" VerticalAlignment="Center"/>
+
+            <TextBox Grid.Column="1" 
+                     Text="{Binding OutputFilePath, UpdateSourceTrigger=PropertyChanged}" 
+                     Margin="5,0" 
+                     VerticalAlignment="Center"/>
+
+            <Button Grid.Column="2" 
+                    Content="Обзор..." 
+                    Command="{Binding SelectOutputCommand}"
+                    Padding="5,2"/>
+        </Grid>
+
+        <Button Grid.Row="4" 
+                Content="Начать" 
+                Command="{Binding ProcessCommand}"
+                IsEnabled="{Binding IsProcessing, Converter={StaticResource InverseBoolConverter}}"
+                Width="180" 
+                Margin="10,10,0,309" 
+                HorizontalAlignment="Left" Grid.RowSpan="2" RenderTransformOrigin="0.5,0.5">
+            <Button.RenderTransform>
+                <TransformGroup>
+                    <ScaleTransform/>
+                    <SkewTransform AngleX="-1.032"/>
+                    <RotateTransform/>
+                    <TranslateTransform X="-0.595"/>
+                </TransformGroup>
+            </Button.RenderTransform>
+        </Button>
+        <ProgressBar Grid.Row="3" 
+                     Height="20" 
+                     Value="{Binding ProgressValue}" 
+                     Margin="0,5"/>
+        <TextBlock Grid.Row="4" 
+                   Text="{Binding StatusMessage}" 
+                   Margin="0,5" 
+                   Foreground="Gray"
+                   TextWrapping="Wrap"/>
+    </Grid>
+</UserControl>

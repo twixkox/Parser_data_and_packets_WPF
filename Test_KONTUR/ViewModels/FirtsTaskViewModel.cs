@@ -1,6 +1,7 @@
 ﻿using Serilog;
 using System;
 using System.ComponentModel;
+using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
@@ -66,7 +67,7 @@ namespace Test_KONTUR.ViewModels
             {
                 _isProcessing = value;
                 OnPropertyChanged();
-                (ProcessCommand as RelayCommand).CanExecuteChanged.Invoke(this, EventArgs.Empty);
+                (ProcessCommand as RelayCommand)?.CanExecuteChanged?.Invoke(this, EventArgs.Empty);
             }
         }
 
@@ -155,6 +156,12 @@ namespace Test_KONTUR.ViewModels
             {
                 IsProcessing = false;
             }
+        }
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        protected void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        {
+            PropertyChanged.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
     }
 }
