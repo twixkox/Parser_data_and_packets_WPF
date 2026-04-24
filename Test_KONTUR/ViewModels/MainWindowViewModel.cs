@@ -1,4 +1,8 @@
 ﻿using System;
+using System.Diagnostics;
+using System.IO;
+using System.Windows;
+using System.Windows.Input;
 using Test_KONTUR.Services;
 
 
@@ -10,12 +14,15 @@ namespace Test_KONTUR.ViewModels
 
         public FirstTaskViewModel Task1VM { get; }
         public SecondTaskViewModel Task2VM { get; }
+        public ICommand OpenLogFileCommand { get; }
 
         public MainWindowViewModel()
         {
             _settingsService = new SaveService();
             Task1VM = new FirstTaskViewModel();
             Task2VM = new SecondTaskViewModel();
+
+            OpenLogFileCommand = new RelayCommand(_ => OpenLogFile());
 
             LoadSettings();
         }
@@ -31,7 +38,7 @@ namespace Test_KONTUR.ViewModels
 
         private void SaveSettings()
         {
-            var settings = new AppSettings
+            var settings = new PathSettings
             {
                 Window1InputFile = Task1VM.InputFilePath,
                 Window1OutputFile = Task1VM.OutputFilePath,
@@ -41,6 +48,26 @@ namespace Test_KONTUR.ViewModels
             _settingsService.Save(settings);
         }
 
+        private void OpenLogFile()
+        {
+            try
+            {
+                string logFile = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Logs", "log.json");
+                if (File.Exists(logFile))
+                {
+                    Process.Start("notepad.exe", logFile);
+                }
+                else
+                {
+                    MessageBox.Show("Файл лога не найден", "Информация", MessageBoxButton.OK, MessageBoxImage.Information);
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Ошибка: {ex.Message}", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+        
         public void Dispose()
         {
             SaveSettings();

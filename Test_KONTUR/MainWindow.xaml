@@ -69,6 +69,15 @@
                            Text="{Binding Task1VM.StatusMessage}" 
                            Margin="0,5"
                            TextWrapping="Wrap"/>
+                <Button Content="Открыть лог" 
+        Command="{Binding OpenLogFileCommand}"
+        Width="150" 
+        Height="25"
+        FontSize="11"
+        Cursor="Hand"
+        HorizontalAlignment="Left" 
+        VerticalAlignment="Bottom"
+        Margin="514,0,0,10" Grid.Row="6"/>
             </Grid>
         </TabItem>
 
@@ -132,6 +141,7 @@
                            Text="{Binding Task2VM.StatusMessage}" 
                            Margin="0,5"
                            TextWrapping="Wrap"/>
+
             </Grid>
         </TabItem>
     </TabControl>

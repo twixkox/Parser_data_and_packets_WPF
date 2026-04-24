@@ -1,9 +1,11 @@
-﻿using System;
+﻿using Serilog;
+using System;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
+using Test_KONTUR.Models;
 using Test_KONTUR.Services;
 
 namespace Test_KONTUR.ViewModels
@@ -12,6 +14,7 @@ namespace Test_KONTUR.ViewModels
     {
         private readonly DataParser _parser;
         private readonly FileProvider _fileProvider;
+        private readonly ILogger _logger;
 
         private string _inputFilePath;
         private string _outputFilePath;
@@ -21,6 +24,7 @@ namespace Test_KONTUR.ViewModels
 
         public SecondTaskViewModel()
         {
+            _logger = Log.ForContext<SecondTaskViewModel>();
             _parser = new DataParser();
             _fileProvider = new FileProvider();
             SelectInputCommand = new RelayCommand(_ => SelectInputFile());
@@ -96,6 +100,7 @@ namespace Test_KONTUR.ViewModels
             if (window.ShowDialog() == true)
             {
                 InputFilePath = window.FileName;
+                _logger.Information($"Выбран файл для обработки {window.FileName}");
             }
         }
 
@@ -111,6 +116,7 @@ namespace Test_KONTUR.ViewModels
             if (window.ShowDialog() == true)
             {
                 OutputFilePath = window.FileName;
+                _logger.Information($"Выбран файл для сохранения {window.FileName}");
             }
         }
 
@@ -131,6 +137,7 @@ namespace Test_KONTUR.ViewModels
             IsProcessing = true;
             Progress = 0;
             StatusMessage = "Начало обработки";
+            _logger.Information($"Начало обработки");
 
             try
             {
@@ -145,12 +152,14 @@ namespace Test_KONTUR.ViewModels
                 await Task.Run(() => _fileProvider.ExportDataListToCsv(dataList, OutputFilePath));
 
                 StatusMessage = $"Обработка - {dataList.Count} записей завершена.";
+                _logger.Information($"Обработка файла завершена. Обработано {dataList.Count} записей");
                 Progress = 100;
             }
             catch (Exception ex)
             {
                 StatusMessage = $"Произошла ошибка при выполнении";
                 MessageBox.Show(ex.Message, "Произошла ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+                _logger.Error($"Произошла ошибка при выполнении обработки {ex.Message}. SecondTaskViewModel");
                 Progress = 0;
             }
             finally

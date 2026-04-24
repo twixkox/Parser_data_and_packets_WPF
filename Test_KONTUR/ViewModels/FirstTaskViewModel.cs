@@ -23,6 +23,7 @@ namespace Test_KONTUR.ViewModels
 
         public FirstTaskViewModel()
         {
+            _logger = Log.ForContext<FirstTaskViewModel>();
             _parser = new DataParser();
             _fileProvider = new FileProvider();
             SelectInputCommand = new RelayCommand(_ => SelectInputFile());
@@ -97,6 +98,7 @@ namespace Test_KONTUR.ViewModels
             if (dialogWindow.ShowDialog() == true)
             {
                 InputFilePath = dialogWindow.FileName;
+                _logger.Information($"Выбран файл для обработки {dialogWindow.FileName}");
             }
         }
 
@@ -112,6 +114,7 @@ namespace Test_KONTUR.ViewModels
             if (dialogWindow.ShowDialog() == true)
             {
                 OutputFilePath = dialogWindow.FileName;
+                _logger.Information($"Выбран файл для сохранения {dialogWindow.FileName}");
             }
         }
 
@@ -132,6 +135,7 @@ namespace Test_KONTUR.ViewModels
             IsProcessing = true;
             Progress = 0;
             StatusMessage = "Начало обработки";
+            _logger.Information($"Начало обработки");
 
             try
             {
@@ -146,12 +150,14 @@ namespace Test_KONTUR.ViewModels
                 await Task.Run(() => _fileProvider.ExportToCsv(packets, OutputFilePath));
 
                 StatusMessage = $"Обработка - {packets.Count} пакетов завершена.";
+                _logger.Information($"Обработка файла завершена. Обработано {packets.Count} пакетов");
                 Progress = 100;
             }
             catch (Exception ex)
             {
                 StatusMessage = $"Произошла ошибка при выполнении";
                 MessageBox.Show(ex.Message, "Произошла ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+                _logger.Error($"Произошла ошибка при выполнении обработки {ex.Message}. FirstTaskViewModel");
                 Progress = 0;
             }
             finally

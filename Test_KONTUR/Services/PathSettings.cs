@@ -1,6 +1,6 @@
 ﻿namespace Test_KONTUR.Services
 {
-    public class AppSettings
+    public class PathSettings
     {
         public string Window1InputFile { get; set; } = "";
         public string Window1OutputFile { get; set; } = "";
