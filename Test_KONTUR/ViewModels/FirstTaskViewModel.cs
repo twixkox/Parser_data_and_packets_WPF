@@ -151,6 +151,7 @@ namespace Test_KONTUR.ViewModels
 
                 StatusMessage = $"Обработка - {packets.Count} пакетов завершена.";
                 _logger.Information($"Обработка файла завершена. Обработано {packets.Count} пакетов");
+
                 Progress = 100;
             }
             catch (Exception ex)
@@ -158,6 +159,7 @@ namespace Test_KONTUR.ViewModels
                 StatusMessage = $"Произошла ошибка при выполнении";
                 MessageBox.Show(ex.Message, "Произошла ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
                 _logger.Error($"Произошла ошибка при выполнении обработки {ex.Message}. FirstTaskViewModel");
+
                 Progress = 0;
             }
             finally

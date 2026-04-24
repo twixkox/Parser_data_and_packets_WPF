@@ -141,7 +141,6 @@
                            Text="{Binding Task2VM.StatusMessage}" 
                            Margin="0,5"
                            TextWrapping="Wrap"/>
-
             </Grid>
         </TabItem>
     </TabControl>

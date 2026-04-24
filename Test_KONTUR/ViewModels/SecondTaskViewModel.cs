@@ -5,7 +5,6 @@ using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
-using Test_KONTUR.Models;
 using Test_KONTUR.Services;
 
 namespace Test_KONTUR.ViewModels
@@ -174,5 +173,4 @@ namespace Test_KONTUR.ViewModels
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
     }
-
 }
