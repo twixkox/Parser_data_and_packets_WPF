@@ -9,7 +9,7 @@ using Test_KONTUR.Services;
 
 namespace Test_KONTUR.ViewModels
 {
-    public class FirtsTaskViewModel : INotifyPropertyChanged
+    public class FirstTaskViewModel : INotifyPropertyChanged
     {
         private readonly DataParser _parser;
         private readonly FileProvider _fileProvider;
@@ -21,10 +21,10 @@ namespace Test_KONTUR.ViewModels
         private bool _isProcessing;
         private string _statusMessage;
 
-        public FirtsTaskViewModel()
+        public FirstTaskViewModel()
         {
             _parser = new DataParser();
-
+            _fileProvider = new FileProvider();
             SelectInputCommand = new RelayCommand(_ => SelectInputFile());
             SelectOutputCommand = new RelayCommand(_ => SelectOutputFile());
             ProcessCommand = new RelayCommand(async _ => await ProcessAsync(), _ => !_isProcessing);
@@ -67,10 +67,11 @@ namespace Test_KONTUR.ViewModels
             {
                 _isProcessing = value;
                 OnPropertyChanged();
-                (ProcessCommand as RelayCommand)?.CanExecuteChanged?.Invoke(this, EventArgs.Empty);
+                OnPropertyChanged(nameof(IsNotProcessing));
+                (ProcessCommand as RelayCommand)?.RaiseCanExecuteChanged();
             }
         }
-
+        public bool IsNotProcessing => !IsProcessing;
         public string StatusMessage
         {
             get => _statusMessage;
@@ -90,7 +91,7 @@ namespace Test_KONTUR.ViewModels
             var dialogWindow = new Microsoft.Win32.OpenFileDialog
             {
                 Title = "Выберите файл с данными",
-                Filter = "DAT files (*.dat)"
+                Filter = "DAT files (*.dat)|*.dat|All files (*.*)|*.*"
             };
 
             if (dialogWindow.ShowDialog() == true)
@@ -104,12 +105,13 @@ namespace Test_KONTUR.ViewModels
             var dialogWindow = new Microsoft.Win32.SaveFileDialog
             {
                 Title = "Сохранить CSV файл",
-                Filter = "CSV files (*.csv)"
+                Filter = "CSV files (*.csv)|*.csv",
+                DefaultExt = ".csv",               
             };
 
             if (dialogWindow.ShowDialog() == true)
             {
-                InputFilePath = dialogWindow.FileName;
+                OutputFilePath = dialogWindow.FileName;
             }
         }
 
@@ -161,7 +163,7 @@ namespace Test_KONTUR.ViewModels
 
         protected void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {
-            PropertyChanged.Invoke(this, new PropertyChangedEventArgs(propertyName));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
     }
 }

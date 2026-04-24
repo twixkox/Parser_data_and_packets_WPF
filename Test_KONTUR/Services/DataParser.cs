@@ -56,5 +56,42 @@ namespace Test_KONTUR.Services
             }
             return packets;
         }
+
+        public List<DataList> ParseSecondFile(string inputFilePath, IProgress<int> progress)
+        {
+            var result = new List<DataList>();
+
+            byte[] fileData = File.ReadAllBytes(inputFilePath);
+
+            int totalItems = fileData.Length / 4;
+            int currentItem = 0;
+
+            for(int offset = 0; offset +4 <= fileData.Length; offset += 4)
+            {
+                uint value = BitConverter.ToUInt32(fileData, offset);
+
+                var data = ParseUint32ToFields(value);
+                result.Add(data);
+
+                currentItem++;
+                progress.Report((currentItem * 100) / totalItems);
+            }
+            return result;
+        }
+
+        private DataList ParseUint32ToFields(uint value)
+        {
+            var data = new DataList();
+
+            data.IsEnabled1 = (value & 0x1) == 1;
+            data.Value11 = (value >> 1) & 0x7;
+            data.Value12 = (value >> 4) & 0x7;
+            data.Value13 = (value >> 7) & 0x7;
+            data.IsEnabled2 = ((value >> 16) & 0x1) == 1;
+            data.Value21 = (value >> 17) & 0x7;
+            data.Value22 = (value >> 20) & 0x7;
+
+            return data;
+        }
     }
 }

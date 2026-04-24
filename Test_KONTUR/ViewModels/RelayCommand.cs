@@ -29,10 +29,12 @@ namespace Test_KONTUR.ViewModels
             _execute(parameter);
         }
 
-        public event EventHandler CanExecuteChanged
+        public void RaiseCanExecuteChanged()
         {
-            add { CommandManager.RequerySuggested += value; }
-            remove {  CommandManager.RequerySuggested -= value;}
+            CanExecuteChanged?.Invoke(this, EventArgs.Empty);
         }
+
+        public event EventHandler CanExecuteChanged;
+      
     }
 }

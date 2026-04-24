@@ -24,5 +24,24 @@ namespace Test_KONTUR.Services
                 }
             }
         }
+
+        public void ExportDataListToCsv(List<DataList> dataList, string filePath)
+        {
+            using (var writer = new StreamWriter(filePath))
+            {
+                writer.WriteLine("IsEnabled1,Value11,Value12,Value13,IsEnabled2,Value21,Value22");
+
+                foreach (var data in dataList)
+                {
+                    writer.WriteLine($"{data.IsEnabled1}," +
+                 $"{data.Value11}," +
+                 $"{data.Value12}," +
+                 $"{data.Value13}," +
+                 $"{data.IsEnabled2}," +
+                 $"{data.Value21}," +
+                 $"{data.Value22}");
+                }
+            }
+        }
     }
 }
